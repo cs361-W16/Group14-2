@@ -15,7 +15,7 @@
 
     <tr><td class="columnOfCards" id="c0">
         <table>
-            <tr><td class="cardLocation l0"></td></tr>
+            <tr><td onclick="moveHere(1)" class="cardLocation l0"></td></tr>
             <tr><td class="cardLocation l1"></td></tr>
             <tr><td class="cardLocation l2"></td></tr>
             <tr><td class="cardLocation l3"></td></tr>
@@ -33,7 +33,7 @@
     </td>
         <td class="columnOfCards" id="c1">
             <table>
-                <tr><td class="cardLocation l0"></td></tr>
+                <tr><td onclick="moveHere(2)" class="cardLocation l0"></td></tr>
                 <tr><td class="cardLocation l1"></td></tr>
                 <tr><td class="cardLocation l2"></td></tr>
                 <tr><td class="cardLocation l3"></td></tr>
@@ -51,7 +51,7 @@
         </td>
         <td class="columnOfCards" id="c2">
             <table>
-                <tr><td class="cardLocation l0"></td></tr>
+                <tr><td onclick="moveHere(3)" class="cardLocation l0"></td></tr>
                 <tr><td class="cardLocation l1"></td></tr>
                 <tr><td class="cardLocation l2"></td></tr>
                 <tr><td class="cardLocation l3"></td></tr>
@@ -69,7 +69,7 @@
         </td>
         <td class="columnOfCards" id="c3">
             <table>
-                <tr><td class="cardLocation l0"></td></tr>
+                <tr><td onclick="moveHere(4)" class="cardLocation l0"></td></tr>
                 <tr><td class="cardLocation l1"></td></tr>
                 <tr><td class="cardLocation l2"></td></tr>
                 <tr><td class="cardLocation l3"></td></tr>
@@ -92,6 +92,8 @@
 <BR>Remove from: <button id="Remove1">Column1</button><button id="Remove2">Column2</button><button id="Remove3">Column3</button><button id="Remove4">Column4</button>
 
 <BR>Move from column <input type="text" id="from_col"  /> to <input type="text" id="to_col"  /> <button id="moveButton">Move</button>
+<br>
+<label id="prompt"></label>
 
 <script>
 
@@ -118,6 +120,15 @@ $( '.columnOfCards .cardLocation' ).html("");
         $( '#c3 .l'+key ).html(val.value + val.suit);
     });
 
+
+
+}
+
+function moveHere(column){
+    if(document.getElementById("prompt").innerHTML = "Select a card to move."){
+
+    }
+    document.getElementById("prompt").innerHTML = "Select a card to move.";
 
 
 }
