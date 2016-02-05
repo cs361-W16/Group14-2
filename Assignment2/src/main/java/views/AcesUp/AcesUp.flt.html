@@ -2,6 +2,7 @@
 
 <link href="/assets/css/AcesUp.css" rel="stylesheet">
 <script type="text/javascript" src="/assets/webjars/jquery/2.1.3/jquery.js"></script>
+<script type="text/javascript" src="move.js"></script>
 
 <body>
 
@@ -119,58 +120,12 @@ $( '.columnOfCards .cardLocation' ).html("");
         $( '#c3 .l'+key ).html(val.value + val.suit);
     });
 
-
-
-}
-
-function moveHere(column, place){
-
-    //user clicks on card
-    if(place == 0 && document.getElementById("prompt").innerHTML == "Select a card to move to column: "){
-        //move card to column
-
-        //function(){
-            var colFrom = column;
-            var colTo = document.getElementById("colNum").innerHTML;
-            $.ajax({
-                type: "POST",
-                url: "/moveCard/"+colFrom+"/"+colTo,
-                data: JSON.stringify(game),
-                success: function(data, status){console.log("Data: " + data + "\nStatus: " + status);
-                    game = data;
-                    display(data);},
-                contentType:"application/json; charset=utf-8",
-                dataType:"json",
-            });
-        //}
-
-        document.getElementById("prompt").innerHTML = "Card moved.";
-        document.getElementById("colNum").innerHTML = "";
-
-
-    }else if(place == 0 && document.getElementById("prompt").innerHTML != "Select a card to move to column: "){
-        //do nothing. Not in move mode
-    }
-
-    //user clicks on column
-    if(place == 1 && document.getElementById("prompt").innerHTML == "Select a card to move to column: "){
-        //user cancelled the move. No longer in move mode
-        document.getElementById("prompt").innerHTML = "";
-        document.getElementById("colNum").innerHTML = "";
-    }else if(place == 1 && document.getElementById("prompt").innerHTML != "Select a card to move to column: "){
-        //prompt user. Now in move mode
-        document.getElementById("prompt").innerHTML = "Select a card to move to column: ";
-        document.getElementById("colNum").innerHTML = column;
-    }
-
-
 }
 
 $.getJSON("http://localhost:8080/game", function( data ) {
 display(data);
 game = data;
 });
-
 
 $("#dealButton").click(function(){
 $.ajax({
