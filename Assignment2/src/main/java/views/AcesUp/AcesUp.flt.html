@@ -7,10 +7,17 @@
 
 <table>
     <tr class="title">
-        <td>Column0</td>
-        <td >Column1</td>
-        <td >Column2</td>
-        <td >Column3</td>
+        <td>Column1</td>
+        <td>Column2</td>
+        <td>Column3</td>
+        <td>Column4</td>
+    </tr>
+
+    <tr>
+        <td><button id="b0" onclick="moveHere(0)">Move to Here</button></td>
+        <td><button id="b1" onclick="moveHere(1)">Move to Here</button></td>
+        <td><button id="b2" onclick="moveHere(2)">Move to Here</button></td>
+        <td><button id="b3" onclick="moveHere(3)">Move to Here</button></td>
     </tr>
 
     <tr><td class="columnOfCards" id="c0">
@@ -103,6 +110,9 @@
     <p id="Score">Score:  0</p>
 
 </div>
+
+<br>
+<label id="prompt"></label><label id="colNum"></label>
 
 <script>
 
@@ -197,6 +207,63 @@ $("#Remove4").click(function(){
     removeCard(3);
 });
 
+function moveHere(column){
+
+    if(document.getElementById("prompt").innerHTML == "Select a card to move to column: "){
+        //user clicks on column to move
+
+        //move card to column
+        var colFrom = column;
+        var colTo = document.getElementById("colNum").innerHTML;
+        colTo = colTo - 1;
+        if(colFrom == colTo){
+            //move cancelled
+            document.getElementById("prompt").innerHTML = "Move cancelled.";
+            document.getElementById("colNum").innerHTML = "";
+            for(i = 0; i < 4; i++){
+                bId = "b" + i;
+                document.getElementById(bId).innerHTML = "Move to Here";
+            }
+            bId = "b" + column;
+            document.getElementById(bId).innerHTML = "Move to Here";
+
+        }else{
+            $.ajax({
+                type: "POST",
+                url: "/moveCard/"+colFrom+"/"+colTo,
+                data: JSON.stringify(game),
+                success: function(data, status){console.log("Data: " + data + "\nStatus: " + status);
+                    game = data;
+                    display(data);},
+                contentType:"application/json; charset=utf-8",
+                dataType:"json",
+            });
+
+            for(i = 0; i < 4; i++){
+                bId = "b" + i;
+                document.getElementById(bId).innerHTML = "Move to Here";
+            }
+            document.getElementById("prompt").innerHTML = "Card moved.";
+            document.getElementById("colNum").innerHTML = "";
+        }
+    }else{
+        //user clicks on column
+        //prompt user
+        document.getElementById("prompt").innerHTML = "Select a card to move to column: ";
+        bId = "b" + column;
+        document.getElementById(bId).innerHTML = "Click to Cancel";
+
+        for(i = 0; i < 4; i++){
+            testId = "b" + i;
+            if(document.getElementById(testId).innerHTML == "Move to Here"){
+                document.getElementById(testId).innerHTML = "Move From Here";
+            }
+        }
+        column = column + 1;
+        document.getElementById("colNum").innerHTML = column;
+        //now in move mode
+    }
+}
 
 $("#moveButton").click(function(){
 var colFrom = $("#from_col").val();
