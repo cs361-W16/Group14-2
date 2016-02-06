@@ -15,10 +15,10 @@
     </tr>
 
     <tr>
-        <td><button onclick="moveHere(0)">Move Card Here</button></td>
-        <td><button onclick="moveHere(1)">Move Card Here</button></td>
-        <td><button onclick="moveHere(2)">Move Card Here</button></td>
-        <td><button onclick="moveHere(3)">Move Card Here</button></td>
+        <td><button id="b0" onclick="moveHere(0)">Move to Here</button></td>
+        <td><button id="b1" onclick="moveHere(1)">Move to Here</button></td>
+        <td><button id="b2" onclick="moveHere(2)">Move to Here</button></td>
+        <td><button id="b3" onclick="moveHere(3)">Move to Here</button></td>
     </tr>
 
     <tr><td class="columnOfCards" id="c0">
@@ -178,40 +178,60 @@ $("#Remove4").click(function(){
 
 function moveHere(column){
 
-    //user clicks on card
     if(document.getElementById("prompt").innerHTML == "Select a card to move to column: "){
-        //move card to column
+        //user clicks on column to move
 
+        //move card to column
         var colFrom = column;
         var colTo = document.getElementById("colNum").innerHTML;
+        colTo = colTo - 1;
         if(colFrom == colTo){
             //move cancelled
-            document.getElementById("prompt").innerHTML == "Select a card to move to column: "
+            document.getElementById("prompt").innerHTML = "Move cancelled.";
+            document.getElementById("colNum").innerHTML = "";
+            for(i = 0; i < 4; i++){
+                bId = "b" + i;
+                document.getElementById(bId).innerHTML = "Move to Here";
+            }
+            bId = "b" + column;
+            document.getElementById(bId).innerHTML = "Move to Here";
+
+        }else{
+            $.ajax({
+                type: "POST",
+                url: "/moveCard/"+colFrom+"/"+colTo,
+                data: JSON.stringify(game),
+                success: function(data, status){console.log("Data: " + data + "\nStatus: " + status);
+                    game = data;
+                    display(data);},
+                contentType:"application/json; charset=utf-8",
+                dataType:"json",
+            });
+
+            for(i = 0; i < 4; i++){
+                bId = "b" + i;
+                document.getElementById(bId).innerHTML = "Move to Here";
+            }
+            document.getElementById("prompt").innerHTML = "Card moved.";
             document.getElementById("colNum").innerHTML = "";
         }
-        $.ajax({
-            type: "POST",
-            url: "/moveCard/"+colFrom+"/"+colTo,
-            data: JSON.stringify(game),
-            success: function(data, status){console.log("Data: " + data + "\nStatus: " + status);
-                game = data;
-                display(data);},
-            contentType:"application/json; charset=utf-8",
-            dataType:"json",
-        });
-
-        document.getElementById("prompt").innerHTML = "Card moved.";
-        document.getElementById("colNum").innerHTML = "";
-    }
-
-    //user clicks on column
-    if(document.getElementById("prompt").innerHTML != "Select a card to move to column: "){
+    }else{
+        //user clicks on column
         //prompt user
         document.getElementById("prompt").innerHTML = "Select a card to move to column: ";
-        document.getElementById("colNum").innerHTML = column;
-        //no in move mode
-    }
+        bId = "b" + column;
+        document.getElementById(bId).innerHTML = "Click to Cancel";
 
+        for(i = 0; i < 4; i++){
+            testId = "b" + i;
+            if(document.getElementById(testId).innerHTML == "Move to Here"){
+                document.getElementById(testId).innerHTML = "Move From Here";
+            }
+        }
+        column = column + 1;
+        document.getElementById("colNum").innerHTML = column;
+        //now in move mode
+    }
 }
 
 $("#moveButton").click(function(){
