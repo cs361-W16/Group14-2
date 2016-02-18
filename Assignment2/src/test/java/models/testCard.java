@@ -32,5 +32,17 @@ public class testCard {
         assertEquals(0,g.cols.get(0).size());
     }
 
+    @Test
+    public void testGetSpanishSuit(){
+        Card c = new Card(1,Suit.Swords);
+        assertEquals(Suit.Swords,c.getSuit());
+    }
+
+    @Test
+    public void testToStringSpanish(){
+        Card c = new Card(7,Suit.Swords);
+        assertEquals("7Swords",c.toString());
+    }
+
 
 }

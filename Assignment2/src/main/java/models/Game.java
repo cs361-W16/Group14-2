@@ -21,6 +21,16 @@ public class Game {
         cols.add(new ArrayList<Card>());
     }
 
+    public void buildSpanishDeck() {
+        for(int i = 1; i < 7; i++){
+            deck.add(new Card(i,Suit.Clubs));
+            deck.add(new Card(i,Suit.Swords));
+            deck.add(new Card(i,Suit.Coins));
+            deck.add(new Card(i,Suit.Cups));
+        }
+    }
+
+
 
 
 
